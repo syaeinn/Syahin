@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Blood Typing Simulation</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="top-left"><button id="refreshBtn" class="btn top-btn">New Patient</button></div>
+
+  <header id="mode-controls">
+    <button id="btnFull" class="btn mode-btn selected">ABO + Rh</button>
+    <button id="btnABO"  class="btn mode-btn">ABO</button>
+  </header>
+
+  <main>
+    <h1>Simulasi Pengelasan Darah</h1>
+
+      <!-- Board with a single glass slide that has 3 partitions (A, B, D) -->
+      <section id="board" aria-label="Blood slide">
+        <div id="slide" class="glass-slide" role="region" aria-label="Glass slide">
+          <div class="well-wrap" data-well="A" aria-label="Partition A">
+            <div class="partition"></div>
+            <div class="well-label small">A</div>
+          </div>
+
+          <div class="well-wrap" data-well="B" aria-label="Partition B">
+            <div class="partition"></div>
+            <div class="well-label small">B</div>
+          </div>
+
+          <div class="well-wrap" data-well="D" id="wellDwrap" aria-label="Partition D">
+            <div class="partition" id="wellD"></div>
+            <div class="well-label small" id="wellDlabel">D</div>
+          </div>
+        </div>
+      </section>
+
+    <h2></h2>
+
+    <section id="droppers">
+      <div class="dropper-block">
+        <img id="dropperA" class="dropper" draggable="true" data-type="A" src="image/antiA.png" alt="Dropper A">
+        <div class="dropper-label"><br><span class="dropper-serum">Serum Anti-A</span></div>
+      </div>
+
+      <div class="dropper-block">
+        <img id="dropperB" class="dropper" draggable="true" data-type="B" src="image/antiB.png" alt="Dropper B">
+        <div class="dropper-label"><br><span class="dropper-serum">Serum Anti-B</span></div>
+      </div>
+
+      <div class="dropper-block" id="dropperDblock">
+        <img id="dropperD" class="dropper" draggable="true" data-type="D" src="image/antiD.png" alt="Dropper D">
+        <div class="dropper-label"><br><span class="dropper-serum" id="dropperDlabel">Serum Anti-D</span></div>
+      </div>
+
+         <!-- Blood sample image (replace src with your PNG file) -->
+<div class="blood-sample-block">
+    <img id="bloodSample"
+         src="./image/blood.png"
+         alt="Blood Sample"
+         class="blood-sample hidden"
+         draggable="true">
+
+    <div class="blood-sample-text"><br>Sampel Darah</div>
+</div>
+    </section>
+
+    <div id="wrongNotice" class="hidden" role="alert" aria-live="polite">Tidak Tepat!</div>
+
+    <section id="answer-section" class="hidden">
+
+  <div id="answers" class="answers-grid"></div>
+
+  <button id="nextSampleBtn" class="btn next-btn" style="display:none; margin-top:15px;">
+    Next Sample ↻
+  </button>
+</section>
+
+    <section id="question-section" class="hidden fade-box">
+      <h3 id="quiz-question"></h3>
+      <div id="quiz-buttons"></div>
+
+      <div class="score-row" style="display:none;">
+        <div id="scoreText"></div>
+        <button id="nextPatientBtn" aria-label="Next patient" class="btn next-btn">Sampel Seterusnya ↻</button>
+      </div>
+    </section>
+  </main>
+
+  <audio id="dropSound" src="./audio/water dropper.mp3"></audio>
+  <audio id="bloodDropSound" src="./audio/water dropper.mp3"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>

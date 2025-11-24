@@ -1,0 +1,414 @@
+:root{
+  --accent: #4c84ff;
+  --muted: #e6e6e6;
+  --danger: #d33;
+  --good: #4cb96a;
+  --panel-radius: 18px;
+  --soft-shadow: 0 18px 40px rgba(0,0,0,0.12);
+  --serum-a: rgba(240, 245, 255, 0.95);
+  --serum-b: rgba(240, 245, 255, 0.95);
+  --serum-d: rgba(240, 245, 255, 0.95);
+  --blood-red: #7e0101;
+  --puddle-max: 40%; /* puddle maximum relative size */
+}
+
+/* (keep earlier styles unchanged...) */
+main {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Basic layout */
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: Inter, "Arial", sans-serif;
+  background-color: #525252;
+  margin: 0;
+  padding: 22px;
+  color: #ffffff;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* Top-left hidden by default (keeps your previous placement) */
+#top-left { position: fixed; top: 14px; left: 14px; z-index: 60; display: none; }
+
+/* Buttons and mode controls (unchanged) */
+.btn {
+  border: 2px solid #333;
+  background: #fff;
+  padding: 9px 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s;
+}
+
+.btn:hover{
+  background: #a2e3ff;
+  transition: transform .18s ease, box-shadow .18s ease, background .18s;
+}
+
+/* Mode controls */
+#mode-controls { display: flex; gap: 14px; justify-content: center; margin-top: 6px; margin-bottom: 12px; }
+.mode-btn {
+  padding: 12px 18px;
+  font-size: 18px;
+  border-radius: 12px;
+  border: 2px solid rgba(0,0,0,0.12);
+  background: #fff;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  transition: transform .22s cubic-bezier(.2,.9,.3,1), box-shadow .22s, background .22s;
+}
+.mode-btn:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 12px 34px rgba(76,132,255,0.14); }
+.mode-btn.selected {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 16px 40px rgba(76,132,255,0.18);
+}
+
+/* Title */
+main h1 { text-align:center; margin:6px 0 12px; font-size:28px; }
+main h2 { text-align:center; margin:18px 0 6px; }
+
+
+/* ---------- New glass slide styles (realistic textured slide) ---------- */
+.glass-slide {
+  width: 620px;
+  height: 210px;
+
+  /* Real lab slide glass effect */
+  background: rgba(255, 255, 255, 0.22); /* transparent white */
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.33);
+  
+  box-shadow:
+    0 8px 22px rgba(0,0,0,0.16),    /* deep shadow under slide */
+    inset 0 1px 2px rgba(255,255,255,0.5), /* shine */
+    inset 0 -1px 2px rgba(0,0,0,0.05);     /* lower shading */
+
+  position: relative;
+  display: flex;
+  gap: 0;
+  overflow: visible;
+  align-items: stretch;
+  padding: 18px;
+}
+
+/* slightly noisy texture + faint scratches (realistic) */
+/* Glass grain texture */
+.glass-slide::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 10px;
+
+  background-image:
+    url("./image/scratch.png"); /* tiny noise texture */
+  mix-blend-mode: soft-light;
+  opacity: 0.25;
+  filter: contrast(140%) brightness(105%);
+}
+
+/* Long reflection stripe like real glass */
+.glass-slide::after {
+  content: "";
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  top: 12%;
+  height: 20%;
+  background: linear-gradient(
+      90deg,
+      rgba(255,255,255,0.25),
+      rgba(255,255,255,0.08)
+  );
+  filter: blur(8px);
+  opacity: 0.45;
+  transform: skewY(-6deg);
+  pointer-events: none;
+}
+
+/* partition wrapper: we reuse .well-wrap but make them inline partitions across the slide */
+.well-wrap {
+  position: relative;
+  width: calc((100% - 36px) / 3); /* fit three inside the slide padding area */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 6px;
+}
+
+/* each partition is the clickable area where puddle/partition elements appear */
+.partition {
+  width: 100%;
+  height: 100%;
+  min-height: 140px;
+  border-radius: 6px;
+  position: relative;
+  overflow: visible;
+  background: transparent;
+  border: none; /* no circular well border — slide is flat */
+}
+
+/* partition marker label */
+.well-label.small {
+  margin-top: 10px;
+  font-weight:900;
+  color:#ffffff;
+  font-size:16px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+/* serum puddle (small rounded droplet on glass) */
+.serum-fill {
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:0%;
+  height:0%;
+  border-radius:50%;
+  transform: translate(-50%, -50%);
+  transition:
+      width 700ms cubic-bezier(.2,.9,.2,1),
+      height 700ms cubic-bezier(.2,.9,.2,1),
+      background 200ms,
+      filter 450ms;
+  z-index: 6;
+  pointer-events:none;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.12), inset 0 -6px 14px rgba(255,255,255,0.06);
+}
+
+/* reaction layer (blood mixing into puddle) */
+.reaction-layer {
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:0%;
+  height:0%;
+  border-radius:50%;
+  transform: translate(-50%, -50%);
+  z-index:7;
+  pointer-events:none;
+  opacity:0;
+  transition:
+      width 500ms cubic-bezier(.2,.9,.2,1),
+      height 500ms cubic-bezier(.2,.9,.2,1),
+      opacity 300ms;
+  mix-blend-mode: multiply;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+/* drop particle */
+.well-drop {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  animation: dropFall 0.6s ease forwards;
+  z-index: 9;
+}
+
+/* drop animation adjusted for slide (drop comes from above) */
+@keyframes dropFall {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -240%);
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* clump build animation (slightly tweaked for slide puddles) */
+.clump {
+  position: absolute;
+  background: radial-gradient(circle at 40% 30%, #b71818 0%, #7a0000 75%);
+  border-radius: 50% 60% 60% 50%;
+  opacity: 0;
+  transform: scale(0.25) translateY(6px) rotate(-6deg);
+  animation: clumpGrow 1100ms cubic-bezier(.22,.95,.3,1) forwards;
+  z-index: 10;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+}
+@keyframes clumpGrow {
+  0%   { opacity:0; transform: scale(.25) translateY(8px) rotate(-10deg); filter: blur(2px); }
+  50%  { opacity:0.75; transform: scale(.92) translateY(0px) rotate(-3deg); filter: blur(0.6px); }
+  100% { opacity:1; transform: scale(1) translateY(0px) rotate(0deg); filter: none; }
+}
+
+/* clump halo */
+.clump::after {
+  content: "";
+  position: absolute;
+  left: -10%;
+  top: -10%;
+  width: 120%;
+  height: 120%;
+  border-radius: 50%;
+  filter: blur(8px);
+  opacity: 0;
+  animation: haloSoft 1200ms forwards 260ms;
+}
+@keyframes haloSoft { to { opacity:0.9; } }
+
+/* small responsive tweaks */
+@media (max-width:920px) {
+  #board { width: 100%; padding:18px; gap:18px; }
+  #blood-sample-area { display:none; } /* hide on small screens to keep space */
+}
+
+/* rest of your styles (answers/buttons/notice etc) unchanged... */
+/* ... kept as in your original file beyond this point ... */
+
+.answers-grid { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:8px; }
+.answers-grid button {
+  padding: 10px 14px;
+  border-radius:12px;
+  border: none;
+  background: #fff;
+  font-weight:700;
+  cursor:pointer;
+  transition: transform .15s, box-shadow .15s, background .15s, opacity .2s;
+  opacity: 0;
+  transform: translateY(8px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+.answers-grid.show button { opacity: 1; transform: translateY(0); }
+.answers-grid button:hover { transform: translateY(-6px); box-shadow: 0 12px 28px rgba(0,0,0,0.12); background-color: #98eedd; }
+.answers-grid button.correct { background:linear-gradient(180deg,#4cd37b,#2ea85a); color:#fff; box-shadow: 0 14px 36px rgba(46,168,90,0.18); }
+.answers-grid button.wrong { background: linear-gradient(180deg,#ff7b7b,#d94b4b); color:#fff; }
+
+#wrongNotice {
+  position: fixed;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  background: rgba(211,50,50,0.95);
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-weight:800;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .6s ease;
+}
+#wrongNotice.show { opacity: 1; }
+
+#droppers {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  margin: 20px auto;
+}
+
+.dropper-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dropper,
+#bloodSample {
+  width: 110px;    /* FIXED SIZE */
+  height: auto;
+  object-fit: contain;
+  cursor: grab;
+}
+
+.blood-sample-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.blood-sample-text {
+  margin-top: 6px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+
+.dropper-label{
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.A:hover{
+  size: 40px;
+}
+
+
+.blood-sample:not(.hidden) + .blood-sample-text {
+  opacity: 1;
+}
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.blood-sample {
+  transition: opacity .35s ease;
+}
+
+#answer-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* <-- centers everything inside */
+}
+
+#nextSampleBtn:hover{
+  background-color: rgb(255, 255, 0);
+  transform: translateY(-6px) scale(1.02); box-shadow: 0 12px 34px rgba(76,132,255,0.14); 
+  transform: translateY(-4px) scale(1.02);
+}
+
+#nextSampleBtn {
+    margin-top: 15px;
+    border: 1px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity .35s ease, transform .35s ease;
+    transition: background 0.3s ease;
+}
+
+#nextSampleBtn.show {
+    opacity: 1 !important;
+    transform: translateY(0);
+    display: block !important;
+}
+
+/* Hover zoom for droppers and blood sample */
+.dropper:hover,
+#bloodSample:hover {
+  transform: scale(1.1);
+  transition: transform 0.22s ease;
+}
+
+.dropper,
+#bloodSample {
+  transition: transform 0.22s ease;
+}
+
