@@ -511,13 +511,5 @@ main h2 { text-align:center; margin:18px 0 6px; }
 }
 
 
-/* Example CSS for a specific element */
-.no-long-press {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none;  /* Safari */
-  -moz-user-select: none;     /* Firefox */
-  -ms-user-select: none;      /* Internet Explorer 10+ */
-  user-select: none;          /* Standard */
-}
 
 
