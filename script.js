@@ -1,22 +1,6 @@
 /* Elements */
 
-// Disable iOS long-press save/preview menu globally
-document.addEventListener("contextmenu", function(e) {
-    e.preventDefault();
-}, false);
 
-// Cancel touch hold default behavior on images & draggable items
-const blockTargets = ["IMG", "CANVAS"];
-
-document.addEventListener("touchstart", function(e) {
-    if (
-        blockTargets.includes(e.target.tagName) ||
-        e.target.classList.contains("dropper") ||
-        e.target.id === "bloodSample"
-    ) {
-        e.preventDefault();
-    }
-}, { passive: false });
 
 // iOS 300ms long-press cancel
 document.body.style.webkitTouchCallout = "none";
@@ -684,5 +668,6 @@ nextSampleBtn.addEventListener("click", () => {
 /* initialize */
 setModeFull();
 newPatient();
+
 
 
