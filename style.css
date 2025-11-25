@@ -412,3 +412,18 @@ main h2 { text-align:center; margin:18px 0 6px; }
   transition: transform 0.22s ease;
 }
 
+/* Large screens (ultrawide) */
+@media (min-width: 1400px) {
+  .board {
+    transform: scale(1.1);
+  }
+}
+
+/* Disable iOS long-press image preview */
+img, .dropper, #bloodSample, .well {
+  -webkit-touch-callout: none;   /* Disable callout menu */
+  -webkit-user-select: none;     /* Disable text selection */
+  user-select: none;
+  touch-action: none;            /* Prevent default touch handling */
+}
+
