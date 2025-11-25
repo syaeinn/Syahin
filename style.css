@@ -519,4 +519,17 @@ img, .dropper, #bloodSample, .well {
   touch-action: none;            /* Prevent default touch handling */
 }
 
+/* Hard disable iOS long-press image popup */
+img, 
+.dropper, 
+#bloodSample, 
+.well,
+#antiA, #antiB, #antiD {
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    touch-action: none !important;
+    pointer-events: auto;
+}
 
