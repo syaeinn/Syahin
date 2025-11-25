@@ -1,12 +1,5 @@
 /* Elements */
 
-
-
-// iOS 300ms long-press cancel
-document.body.style.webkitTouchCallout = "none";
-document.body.style.webkitUserSelect = "none";
-
-
 const btnFull = document.getElementById('btnFull');
 const btnABO  = document.getElementById('btnABO');
 
@@ -668,6 +661,7 @@ nextSampleBtn.addEventListener("click", () => {
 /* initialize */
 setModeFull();
 newPatient();
+
 
 
 
