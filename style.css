@@ -511,25 +511,13 @@ main h2 { text-align:center; margin:18px 0 6px; }
 }
 
 
-/* Disable iOS long-press image preview */
-img, .dropper, #bloodSample, .well {
-  -webkit-touch-callout: none;   /* Disable callout menu */
-  -webkit-user-select: none;     /* Disable text selection */
-  user-select: none;
-  touch-action: none;            /* Prevent default touch handling */
+/* Example CSS for a specific element */
+.no-long-press {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;  /* Safari */
+  -moz-user-select: none;     /* Firefox */
+  -ms-user-select: none;      /* Internet Explorer 10+ */
+  user-select: none;          /* Standard */
 }
 
-/* Hard disable iOS long-press image popup */
-img, 
-.dropper, 
-#bloodSample, 
-.well,
-#antiA, #antiB, #antiD {
-    -webkit-touch-callout: none !important;
-    -webkit-user-select: none !important;
-    user-select: none !important;
-    -webkit-tap-highlight-color: transparent !important;
-    touch-action: none !important;
-    pointer-events: auto;
-}
 
