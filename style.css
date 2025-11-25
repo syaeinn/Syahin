@@ -419,6 +419,98 @@ main h2 { text-align:center; margin:18px 0 6px; }
   }
 }
 
+/* ================================
+   MOBILE & TABLET RESPONSIVE FIXES
+   ================================ */
+
+/* Phones (portrait) */
+@media (max-width: 480px) {
+
+  body {
+    flex-direction: column;
+    padding: 10px;
+    gap: 15px;
+  }
+
+  .board {
+    width: 95vw;
+    height: 55vh;
+  }
+
+  .wells {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .well {
+    width: 80px;
+    height: 80px;
+  }
+
+  .dropper {
+    width: 55px;
+  }
+
+  .question-container {
+    width: 100%;
+    font-size: 0.9rem;
+  }
+
+  #answers {
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+
+  #answers button {
+    width: 100%;
+    padding: 10px;
+  }
+
+  #nextSample {
+    width: 100%;
+    margin-top: 10px;
+    text-align: center;
+  }
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+
+  body {
+    flex-direction: column;
+    padding: 15px;
+    gap: 25px;
+  }
+
+  .board {
+    width: 90vw;
+    height: 60vh;
+  }
+
+  .well {
+    width: 100px;
+    height: 100px;
+  }
+
+  .dropper {
+    width: 65px;
+  }
+
+  #answers button {
+    font-size: 1rem;
+    padding: 12px;
+  }
+}
+
+/* Large screens (ultrawide) */
+@media (min-width: 1400px) {
+  .board {
+    transform: scale(1.1);
+  }
+}
+
+
 /* Disable iOS long-press image preview */
 img, .dropper, #bloodSample, .well {
   -webkit-touch-callout: none;   /* Disable callout menu */
@@ -426,4 +518,5 @@ img, .dropper, #bloodSample, .well {
   user-select: none;
   touch-action: none;            /* Prevent default touch handling */
 }
+
 
